@@ -1,0 +1,894 @@
+/* ==========================================================
+   style.css — Amit Bastia Portfolio
+   Theme: Black + Beige/Brown Minimalist ("madlife" premium)
+   Uses CSS custom properties for light/dark mode switching.
+   ========================================================== */
+
+/* ----------------------------------------------------------
+   1. GOOGLE-STYLE SYSTEM FONT STACK
+      (no external font CDN — safe for offline use)
+   ---------------------------------------------------------- */
+   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* ----------------------------------------------------------
+   2. CSS CUSTOM PROPERTIES — LIGHT MODE (default)
+   ---------------------------------------------------------- */
+:root {
+  /* Backgrounds */
+  --bg-primary:    #f5f0e8;   /* warm cream */
+  --bg-secondary:  #ede7da;   /* slightly deeper cream for alt sections */
+  --bg-card:       #faf7f2;   /* card surfaces */
+  --bg-navbar:     rgba(245, 240, 232, 0.92); /* translucent navbar */
+
+  /* Text */
+  --text-primary:  #1c1814;   /* near-black charcoal */
+  --text-secondary:#5a4f43;   /* mid-brown paragraph text */
+  --text-muted:    #8a7968;   /* muted captions */
+
+  /* Accent — warm coffee brown */
+  --accent:        #8b5e3c;
+  --accent-hover:  #6f4e37;
+  --accent-light:  rgba(139, 94, 60, 0.12);
+
+  /* Borders & lines */
+  --border:        #d8cfc4;
+  --border-card:   #e0d7ca;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(28, 24, 20, 0.07);
+  --shadow-md: 0 6px 24px rgba(28, 24, 20, 0.10);
+  --shadow-lg: 0 12px 40px rgba(28, 24, 20, 0.13);
+
+  /* Timeline dot */
+  --dot-bg: #fff;
+
+  /* Navbar toggler */
+  --toggler-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%235a4f43' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* ----------------------------------------------------------
+   3. CSS CUSTOM PROPERTIES — DARK MODE OVERRIDE
+   ---------------------------------------------------------- */
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg-primary:    #141210;   /* near-black */
+  --bg-secondary:  #1a1614;   /* slightly lighter dark */
+  --bg-card:       #201c19;   /* card surfaces */
+  --bg-navbar:     rgba(20, 18, 16, 0.94);
+
+  /* Text */
+  --text-primary:  #f0ebe3;   /* warm off-white */
+  --text-secondary:#c4b8a8;   /* muted beige */
+  --text-muted:    #8a7968;
+
+  /* Accent — lighter tan/brown in dark mode so it pops */
+  --accent:        #c8956a;
+  --accent-hover:  #e0a87a;
+  --accent-light:  rgba(200, 149, 106, 0.15);
+
+  /* Borders & lines */
+  --border:        #302a24;
+  --border-card:   #2c2420;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.55);
+
+  --dot-bg: #1a1614;
+
+  --toggler-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23c4b8a8' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* ----------------------------------------------------------
+   4. GLOBAL RESET & BASE
+   ---------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Smooth transition on theme switch for everything */
+html {
+  scroll-behavior: smooth;
+  transition: color 0.35s ease, background-color 0.35s ease;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+a:hover { color: var(--accent-hover); }
+
+img { max-width: 100%; display: block; }
+
+/* Typography helpers */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: var(--text-primary);
+  transition: color 0.35s ease;
+}
+
+strong { color: var(--text-primary); }
+
+/* ----------------------------------------------------------
+   5. UTILITY CLASSES
+   ---------------------------------------------------------- */
+.section-pad {
+  padding: 90px 0;
+}
+
+.section-alt {
+  background-color: var(--bg-secondary);
+  transition: background-color 0.35s ease;
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.section-line {
+  width: 56px;
+  height: 3px;
+  background-color: var(--accent);
+  border-radius: 2px;
+  transition: background-color 0.35s ease;
+}
+
+.accent {
+  color: var(--accent);
+  transition: color 0.35s ease;
+}
+
+/* ----------------------------------------------------------
+   6. NAVBAR
+   ---------------------------------------------------------- */
+#mainNavbar {
+  background-color: var(--bg-navbar);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+
+.navbar-brand {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary) !important;
+  letter-spacing: -0.3px;
+  transition: color 0.35s ease;
+}
+.navbar-brand:hover { color: var(--accent) !important; }
+
+.nav-link {
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary) !important;
+  padding: 6px 10px !important;
+  border-radius: 6px;
+  transition: color 0.25s ease, background-color 0.25s ease;
+}
+.nav-link:hover,
+.nav-link.active {
+  color: var(--accent) !important;
+  background-color: var(--accent-light);
+}
+
+/* Navbar toggler icon (custom color per theme) */
+.navbar-toggler {
+  border-color: var(--border);
+  border-radius: 8px;
+  transition: border-color 0.35s ease;
+}
+.navbar-toggler-icon {
+  background-image: var(--toggler-icon);
+}
+.navbar-toggler:focus { box-shadow: 0 0 0 3px var(--accent-light); }
+
+/* Theme toggle button */
+.btn-theme-toggle {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.25s, color 0.25s, background-color 0.25s;
+}
+.btn-theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background-color: var(--accent-light);
+}
+
+/* ----------------------------------------------------------
+   7. BUTTONS
+   ---------------------------------------------------------- */
+.btn-primary-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--accent);
+  color: #fff;
+  border: 2px solid var(--accent);
+  padding: 11px 28px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: background-color 0.25s ease, border-color 0.25s ease,
+              transform 0.2s ease, box-shadow 0.25s ease;
+}
+.btn-primary-custom:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-outline-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 11px 28px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: background-color 0.25s ease, color 0.25s ease,
+              transform 0.2s ease, box-shadow 0.25s ease;
+}
+.btn-outline-custom:hover {
+  background-color: var(--accent);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ----------------------------------------------------------
+   8. HERO SECTION
+   ---------------------------------------------------------- */
+.hero-section {
+  min-height: 100vh;
+  padding: 120px 0 80px;
+  background-color: var(--bg-primary);
+  transition: background-color 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle background decoration */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  right: -120px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  filter: blur(80px);
+  pointer-events: none;
+  transition: background 0.35s ease;
+}
+
+.hero-greeting {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+  transition: color 0.35s ease;
+}
+
+.hero-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  transition: color 0.35s ease;
+}
+
+.hero-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-bottom: 22px;
+  transition: color 0.35s ease;
+}
+
+.hero-desc {
+  font-size: 0.97rem;
+  color: var(--text-secondary);
+  max-width: 540px;
+  line-height: 1.8;
+  margin-bottom: 32px;
+  transition: color 0.35s ease;
+}
+.hero-desc strong { color: var(--accent); }
+
+/* Social icons */
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  transition: border-color 0.25s, color 0.25s, background-color 0.25s,
+              transform 0.2s;
+}
+.social-icon:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background-color: var(--accent-light);
+  transform: translateY(-3px);
+}
+
+/* Profile circle */
+.profile-circle {
+  width: clamp(220px, 30vw, 320px);
+  height: clamp(220px, 30vw, 320px);
+  border-radius: 50%;
+  border: 3px solid var(--border-card);
+  overflow: hidden;
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow-lg);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+  position: relative;
+}
+.profile-circle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 4px var(--accent-light);
+  transition: box-shadow 0.35s ease;
+}
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ----------------------------------------------------------
+   9. ABOUT SECTION
+   ---------------------------------------------------------- */
+.about-para {
+  font-size: 0.97rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+  margin-bottom: 18px;
+  transition: color 0.35s ease;
+}
+
+.info-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-list li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+
+.info-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  min-width: 130px;
+  transition: color 0.35s ease;
+}
+.info-label i { color: var(--accent); }
+
+.info-value {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  transition: color 0.35s ease;
+}
+
+/* ----------------------------------------------------------
+   10. SKILLS SECTION
+   ---------------------------------------------------------- */
+.skill-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 14px;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+              background-color 0.35s ease, border-color 0.35s ease;
+}
+.skill-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+}
+
+.skill-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background-color: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--accent);
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+.skill-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  transition: color 0.35s ease;
+}
+
+.skill-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.skill-list li {
+  font-size: 0.87rem;
+  color: var(--text-secondary);
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--border);
+  transition: color 0.35s ease, border-color 0.35s ease;
+}
+.skill-list li:last-child { border-bottom: none; }
+.skill-list li::before {
+  content: '—';
+  color: var(--accent);
+  margin-right: 8px;
+  font-weight: 700;
+}
+
+/* Tools grid */
+.tools-heading {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.3px;
+  transition: color 0.35s ease;
+}
+
+.tools-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tool-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border: 1.5px solid var(--border-card);
+  border-radius: 100px;
+  background-color: var(--bg-card);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.25s, color 0.25s, transform 0.2s,
+              background-color 0.35s, box-shadow 0.25s;
+  cursor: default;
+}
+.tool-badge:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.tool-badge i { color: var(--accent); transition: color 0.35s ease; }
+
+/* ----------------------------------------------------------
+   11. PROJECTS SECTION
+   ---------------------------------------------------------- */
+.project-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 14px;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+              border-color 0.3s ease, background-color 0.35s ease;
+}
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+}
+
+/* Corner accent line on hover */
+.project-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: var(--accent);
+  border-radius: 14px 14px 0 0;
+  transition: width 0.4s ease;
+}
+.project-card:hover::after { width: 100%; }
+
+.project-num {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--accent-light);
+  line-height: 1;
+  margin-bottom: 12px;
+  color: var(--border-card);
+  letter-spacing: -1px;
+  transition: color 0.35s ease;
+}
+
+.project-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  transition: color 0.35s ease;
+}
+
+.project-desc {
+  font-size: 0.87rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 16px;
+  transition: color 0.35s ease;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  font-size: 0.73rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background-color: var(--accent-light);
+  color: var(--accent);
+  border: 1px solid transparent;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+/* ----------------------------------------------------------
+   12. INTERNSHIP SECTION
+   ---------------------------------------------------------- */
+.internship-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-left: 4px solid var(--accent);
+  border-radius: 14px;
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.35s ease, border-color 0.35s ease,
+              box-shadow 0.3s ease;
+}
+.internship-card:hover { box-shadow: var(--shadow-md); }
+
+.intern-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  background-color: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--accent);
+  flex-shrink: 0;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+.intern-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  transition: color 0.35s ease;
+}
+
+.intern-meta {
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 500;
+  transition: color 0.35s ease;
+}
+
+.intern-desc {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  transition: color 0.35s ease;
+}
+
+/* ----------------------------------------------------------
+   13. EDUCATION TIMELINE
+   ---------------------------------------------------------- */
+.timeline {
+  position: relative;
+  padding-left: 36px;
+}
+
+/* Vertical line */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent), var(--border));
+  border-radius: 2px;
+  transition: background 0.35s ease;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 40px;
+}
+.timeline-item:last-child { margin-bottom: 0; }
+
+.timeline-dot {
+  position: absolute;
+  left: -30px;
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--dot-bg);
+  border: 3px solid var(--accent);
+  transition: border-color 0.35s ease, background-color 0.35s ease;
+}
+
+.timeline-content {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  padding: 22px 26px;
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.35s ease, border-color 0.35s ease,
+              box-shadow 0.3s ease;
+}
+.timeline-content:hover { box-shadow: var(--shadow-md); }
+
+.timeline-year {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+  transition: color 0.35s ease;
+}
+
+.timeline-degree {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  transition: color 0.35s ease;
+}
+
+.timeline-school {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0;
+  transition: color 0.35s ease;
+}
+
+/* ----------------------------------------------------------
+   14. CONTACT SECTION
+   ---------------------------------------------------------- */
+.contact-sub {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color 0.35s ease;
+}
+
+.contact-intro {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  transition: color 0.35s ease;
+}
+
+.contact-info-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contact-info-list li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  transition: color 0.35s ease;
+}
+
+.contact-info-list i {
+  font-size: 1.1rem;
+  color: var(--accent);
+  width: 22px;
+  flex-shrink: 0;
+  transition: color 0.35s ease;
+}
+
+.contact-info-list a {
+  color: var(--text-secondary);
+  transition: color 0.25s ease;
+}
+.contact-info-list a:hover { color: var(--accent); }
+
+/* Form labels */
+.form-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  transition: color 0.35s ease;
+}
+
+/* Custom input style */
+.custom-input {
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--border-card);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 0.93rem;
+  padding: 12px 16px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease,
+              background-color 0.35s ease, color 0.35s ease;
+}
+.custom-input::placeholder {
+  color: var(--text-muted);
+}
+.custom-input:focus {
+  background-color: var(--bg-card);
+  border-color: var(--accent);
+  color: var(--text-primary);
+  box-shadow: 0 0 0 3px var(--accent-light);
+  outline: none;
+}
+
+/* Bootstrap override: remove blue focus ring */
+.form-control:focus { box-shadow: 0 0 0 3px var(--accent-light); }
+
+/* ----------------------------------------------------------
+   15. FOOTER
+   ---------------------------------------------------------- */
+.site-footer {
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  padding: 36px 0;
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+
+.footer-brand {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color 0.35s ease;
+}
+
+.footer-copy {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  transition: color 0.35s ease;
+}
+
+/* ----------------------------------------------------------
+   16. SCROLLBAR (optional polish)
+   ---------------------------------------------------------- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ----------------------------------------------------------
+   17. SELECTION COLOR
+   ---------------------------------------------------------- */
+::selection {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+/* ----------------------------------------------------------
+   18. RESPONSIVE TWEAKS
+   ---------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .hero-section {
+    padding: 100px 0 60px;
+    text-align: center;
+  }
+  .hero-desc { margin: 0 auto 28px; }
+  .hero-btns { justify-content: center; }
+  .hero-socials { justify-content: center; }
+  .hero-section::before { display: none; }
+
+  .profile-circle {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .section-pad { padding: 64px 0; }
+  .info-list li { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .info-label { min-width: auto; }
+  .internship-card { flex-direction: column; }
+  .timeline { padding-left: 28px; }
+}
